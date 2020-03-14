@@ -19,7 +19,12 @@ class Chitter < Sinatra::Base
   post '/chitter' do
     usn = params['username']
     peep = params['peep']
-    connection = PG.connect(dbname: 'chitter_database_test')
+    if ENV['ENVIRONMENT'] == 'test'
+      connection = PG.connect(dbname: 'chitter_database_test')
+    else
+      connection = PG.connect(dbname: 'chitter_database')
+    end
+
     connection.exec("INSERT INTO peeps (username, peep, time) VALUES('#{usn}', '#{peep}', '#{Time.now}')")
     redirect '/chitter'
   end

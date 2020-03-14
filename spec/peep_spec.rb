@@ -4,9 +4,8 @@ describe Peep do
   # describe ".create" do 
   #   it "allows a user to create a new peep" do
   #    peep = Peep.create(peep: "hello there", username: "obi_wan", time: "#{Time.new}")
-  #    persisted_data = PG.connect(dbname: "chitter_database_test").query("SELECT * FROM peeps WHERE id = #{peep.id};")
+  #    persisted_data = PG.connect(dbname: "chitter_database_test").query("SELECT * FROM peeps;")
 
-  #    expect(peep.id).to eq persisted_data.first['id']
   #    expect(peep.username).to eq 'obi_wan'
   #    expect(peep.peep).to eq 'hello there'
   #   end
