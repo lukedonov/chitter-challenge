@@ -9,8 +9,8 @@ class Peep
       connection = PG.connect(dbname: 'chitter_database')
     end
     
-    result = connection.exec("SELECT * FROM peeps")
-    result.map { |peep| peep['peep'] + " - " + peep["username"]}
+    result = connection.exec("SELECT * FROM peeps ORDER BY time DESC")
+    result.map { |peep| peep['peep'] + " - " + peep["username"] + " #{peep["time"][0..-10]}"}
   end
 
   def self.create(peep:, username:, time:)
