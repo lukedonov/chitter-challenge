@@ -1,5 +1,10 @@
-<ul>
+<% if @user %>
+  <h1 style="text-align: center;">Welcome, <%= @user.username %></h1>
+<% end %>
+<br>
+<h1 style="text-align: center;"><a href="/chitter/new-peep">Write a new peep</a></h1>
   <% @peeps.each do |peep| %>
-    <li><%= peep %></li>
+  <div style="border: 5px black solid; text-align: center; border-radius: 25px; margin-top: 20px; width: 500px; height: 200px; margin-left: auto; margin-right: auto;">
+    <h1><%= peep %></h1>
+  </div>
   <% end %>
-</ul>

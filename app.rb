@@ -1,13 +1,17 @@
 require 'sinatra/base'
 require './lib/peep'
+require './lib/user'
 
 class Chitter < Sinatra::Base 
+  
+  enable :sessions
   
   get '/' do
     "Welcome to Chitter"
   end
 
   get '/chitter' do
+    @user = User.find(session[:user_id])
     @peeps = Peep.all
     erb :index
   end
@@ -17,18 +21,19 @@ class Chitter < Sinatra::Base
   end
   
   post '/chitter' do
-    usn = params['username']
-    peep = params['peep']
-    if ENV['ENVIRONMENT'] == 'test'
-      connection = PG.connect(dbname: 'chitter_database_test')
-    else
-      connection = PG.connect(dbname: 'chitter_database')
-    end
-
-    connection.exec("INSERT INTO peeps (username, peep, time) VALUES('#{usn}', '#{peep}', '#{Time.now}')")
+    Peep.post(params['username'], params['peep'])
     redirect '/chitter'
   end
   
+  get '/users/new' do
+    erb :'users/new'
+  end
+
+  post '/users' do
+    user = User.create(username: params[:username], password: params[:password])
+    session[:user_id] = user.id
+    redirect '/chitter'
+  end
   
 run if app_file == $0 
 end
