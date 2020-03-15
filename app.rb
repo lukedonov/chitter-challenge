@@ -34,6 +34,24 @@ class Chitter < Sinatra::Base
     session[:username] = user
     redirect '/chitter'
   end
+
+  get '/sessions/new' do
+    erb :'sessions/new'
+  end
+
+  post '/sessions' do
+    if ENV["ENVIRONMENT"] == 'test'
+      connection = PG.connect(dbname: "chitter_database_test")
+    else
+      connection = PG.connect(dbname: "chitter_database")
+    end
+    
+    result = connection.exec("SELECT * FROM users WHERE email = '#{params[:email]}'")
+    user = User.new(result[0]['id'], result[0]['email'], result[0]['password'])
+  
+    session[:user_id] = user.id
+    redirect('/chitter')
+  end
   
 run if app_file == $0 
 end
